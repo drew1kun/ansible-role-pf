@@ -15,8 +15,8 @@ The role will create the following pf anchors:
 Those anchors will be loaded in main pf configuration file
 
 **NOTE:**
-The system default /etc/pf.conf on MacOS can be overwritten during system updates, therefore custom /etc/pf.drew.conf
-will be created and /etc/pf.conf will be included in that custom config.
+The system default */etc/pf.conf* on MacOS can be overwritten during system updates, therefore custom */etc/pf.drew.conf*
+will be created and */etc/pf.conf* will be included in that custom config.
 
 ### Launchd jobs
 On MacOS the following Launchd jobs will be created:
@@ -26,7 +26,7 @@ On MacOS the following Launchd jobs will be created:
 Requirements
 ------------
 
-On MacOS 10.11+ (EI Captain) the System Integrity Protection must be disabled in order to be able to modify /System/
+On MacOS 10.11+ (EI Captain) the System Integrity Protection must be disabled in order to be able to modify */System/*
 files.
 
 **Reminder:** Ansible uses ssh so make sure the pf configuration does not block ssh
