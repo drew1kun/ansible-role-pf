@@ -1,27 +1,41 @@
+{% if pf_macros != '' %}
 #====== MACROS start =====#
-{% if pf_macros != '' %}{{ pf_macros }}{% endif %}
+{{ pf_macros }}
 #======= MACROS end ======#
+{% endif %}
 
+{% if pf_tables != '' %}
 #====== TABLES start =====#
-{% if pf_tables != '' %}{{ pf_tables }}{% endif %}
+{{ pf_tables }}
 #======= TABLES end ======#
+{% endif %}
 
+{% if pf_options != '' %}
 #===== OPTIONS start =====#
-{% if pf_options != '' %}{{ pf_options }}{% endif %}
+{{ pf_options }}
 #====== OPTIONS end ======#
+{% endif %}
 
+{% if pf_normalization != '' %}
 #=== NORMLIZATION start ==#
-{% if pf_normalization != '' %}{{ pf_normalization }}{% endif %}
+{{ pf_normalization }}
 #==== NORMLIZATION end ===#
+{% endif %}
 
+{% if pf_queueing != '' %}
 #==== QUEUEING start =====#
-{% if pf_queueing != '' %}{{ pf_queueing }}{% endif %}
+{{ pf_queueing }}
 #===== QUEUEING end ======#
+{% endif %}
 
+{% if pf_translation != '' %}
 #=== TRANSLATION start ===#
-{% if pf_translation != '' %}{{ pf_translation }}{% endif %}
+{{ pf_translation }}
 #==== TRANSLATION end ====#
+{% endif %}
 
+{% if pf_filtering != '' %}
 #==== FILTERING start ====#
-{% if pf_filtering != '' %}{{ pf_filtering }}{% endif %}
+{{ pf_filtering }}
 #===== FILTERING end =====#
+{% endif %}
