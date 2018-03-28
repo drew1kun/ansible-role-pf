@@ -6,7 +6,7 @@ Ansible role: pf
 
 Ansible role for hardening configuration of pf firewall for MacOS (BSD will come soon)
 
-# PF Anchors
+### PF Anchors
 The role will create the following pf anchors:
  - sshd anchor (drew.sshd.rules) with bruteforce protection table and rules
  - emerging-treats open ruleset anchor (drew.eto.rules) with table of known attackers' IPs and rules for blocking them
@@ -18,7 +18,7 @@ Those anchors will be loaded in main pf configuration file
 The system default /etc/pf.conf on MacOS can be overwritten during system updates, therefore custom /etc/pf.drew.conf
 will be created and /etc/pf.conf will be included in that custom config.
 
-# Launchd jobs
+### Launchd jobs
 On MacOS the following Launchd jobs will be created:
  - job for clearing the ssh_bruteforce table once a day at 10:00pm
  - job for automated download of ETOpen ruleset once a day at 10:05pm
