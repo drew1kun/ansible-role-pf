@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>drew.pfctl.emerging-threats.update.plist</string>
+	<key>WorkingDirectory</key>
+	<string>/var/run</string>
+	<key>UserName</key>
+	<string>root</string>
+	<key>GroupName</key>
+	<string>wheel</string>
+	<key>Program</key>
+	<string>/usr/bin/curl</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>curl</string>
+		<string>-o</string>
+		<string>/etc/emerging-Block-IPs.txt</string>
+		<string>http://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt</string>
+	</array>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>22</integer>
+		<key>Minute</key>
+		<integer>05</integer>
+	</dict>
+</dict>
+</plist>

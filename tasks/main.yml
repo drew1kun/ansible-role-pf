@@ -1,0 +1,87 @@
+---
+# tasks file for ansible-pf
+
+- name: "[main] Include Darwin-specific tasks"
+  include_tasks: Darwin.yml
+  when: ansible_os_family == 'Darwin'
+  tags:
+    - pf
+
+# MacOS:
+# The original MacOS pf.conf may be overwritten during system updates.
+# So we will create a custom pf.drew.conf and include the original pf.conf in it.
+- name: "[main] Generate {{ pf_conf }} from template"
+  template:
+    src: conf/pf.conf.j2
+    dest: "{{ pf_conf }}"
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload pfctl
+  tags:
+    - pf
+
+- name: "[main] Create /etc/pf.anchors directory if it doesn't exist"
+  file:
+    path: /etc/pf.anchors
+    state: directory
+    owner: root
+    group: wheel
+    mode: 0755
+  become: yes
+  tags:
+    - pf
+
+- name: "[main] Generate /etc/pf.anchors/drew.rules from template"
+  template:
+    src: conf/pf.anchors/drew.rules.j2
+    dest: /etc/pf.anchors/drew.rules
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload pfctl
+  tags:
+    - pf
+
+- name: "[main] Generate /etc/pf.anchors/drew.sshd.rules from template"
+  template:
+    src: conf/pf.anchors/drew.sshd.rules.j2
+    dest: /etc/pf.anchors/drew.sshd.rules
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload pfctl
+  tags:
+    - pf
+
+- name: "Download Emerging Threads Open Ruleset"
+  get_url:
+    url: http://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt
+    dest: /etc/emerging-Block-IPs.txt
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload pfctl
+  tags:
+    - pf
+
+- name: "[main] Generate /etc/pf.anchors/drew.eto.rules from template"
+  template:
+    src: conf/pf.anchors/drew.eto.rules.j2
+    dest: /etc/pf.anchors/drew.eto.rules
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload pfctl
+  tags:
+    - pf
+
+- meta: flush_handlers
+  tags:
+    - pf
+...

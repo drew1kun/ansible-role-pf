@@ -1,0 +1,23 @@
+#===== OPTIONS ======#
+{% if ansible_os_family == 'Darwin' %}
+# Original pf.conf may be overwritten during system updates,
+# this is why it is included here:
+include "/etc/pf.conf"
+{% endif %}
+#====================#
+
+#=== TRANSLATION ====#
+#rdr-anchor "httpd_fwd"
+#load anchor "httpd_fwd" from "/etc/pf.anchors/httpd_fwd.rules"
+#====================#
+
+#==== FILTERING =====#
+anchor "drew"
+load anchor "drew" from "/etc/pf.anchors/drew.rules"
+
+anchor "drew.sshd"
+load anchor "drew.sshd" from "/etc/pf.anchors/drew.sshd.rules"
+
+anchor "drew.eto"
+load anchor "drew.eto" from "/etc/pf.anchors/drew.eto.rules"
+#====================#

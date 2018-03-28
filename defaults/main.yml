@@ -1,0 +1,83 @@
+---
+# defaults file for ansible-pf
+
+pf_conf: /etc/pf.conf
+
+# User-defined variables
+pf_macros: |
+  #interfaces:
+  LAN="en4"
+  WLAN="en0"
+
+  # ports:
+  vnchttp="5800"
+  vnc="5900"
+  wol="{ 7, 9 }"
+  dns="53"
+  ntp="123"
+
+# Options tune the behavior of the packet filtering engine
+pf_options: |
+  set fingerprints "/etc/pf.os"
+
+  # disable all filtering on all loopback interfaces ('lo' - not only lo0)
+  set skip on lo
+  set block-policy drop
+
+# provide a mechanism for increasing the performance and flexibility of rules
+# with large numbers of source or destination addresses
+pf_tables:
+
+
+pf_normalization: |
+  # Set ruleset optimization to "profile", so it is adjusted based on traffic profile.
+  # "basic" ( is the default) and "none" (disable optimization)
+  set ruleset-optimization basic
+  # Set timeout optimization (normal, high-latency or satellite (same), conservative, aggressive)
+  set optimization normal
+  set timeout { tcp.established 600, tcp.closing 60 }
+
+  # Deal with attacks based on incorrect handling of packet fragments
+  scrub in all no-df fragment reassemble
+
+  # Antispoof external interfaces
+  # format: antispoof [log] [quick] for interface [address family (inet or inet6)]
+  antispoof log quick for { lo $LAN $WLAN }
+
+pf_queueing:
+
+# Redirect rules for port forwarding and NAT go here:
+pf_translation:
+
+# Filtering rules go here:
+pf_filtering: |
+  block log all
+
+  # INCOMING TRAFFIC
+  # Block to/from illegal destinations or sources
+  block in log quick from no-route to any
+
+  # WOL magic packets
+  pass in quick proto udp from any to any port $wol keep state
+
+  # VNC
+  pass in log quick on { $LAN $WLAN } proto tcp from any to any port { $vnc, $vnchttp } keep state
+
+  # DNS
+  pass in quick on { $LAN $WLAN } proto { udp tcp } from any to any port $dns keep state
+
+  # DHCP
+  pass in quick proto udp from any port 67 to any port 68
+
+  # NTP
+  pass in proto udp from any to port $ntp
+
+  # ICMP from home LANs and WLANs
+  pass in inet proto icmp from 10.8.0.0/24     # Ovpn subnet
+  pass in inet proto icmp from 192.168.1.0/24
+  pass in inet proto icmp from 192.168.2.0/24
+  pass in inet proto icmp from 172.16.42.0/24
+
+
+  # OUTCOMING TRAFFIC
+  pass out all

@@ -1,0 +1,58 @@
+---
+- name: "[Darwin] Include Darwin-specific variables"
+  include_vars: Darwin.yml
+  when: ansible_os_family == 'Darwin'
+  tags:
+    - pf
+
+- name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
+  replace:
+    path: /System/Library/LaunchDaemons/com.apple.pfctl.plist
+    regexp: '^(\s*<string>pfctl</string>\n\s*)<string>-.*f</string>(\n\s*<string>).*(</string>)'
+    replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
+  become: yes
+  notify: Reload /System/Library/LaunchDaemons/com.apple.pfctl.plist
+  tags:
+    - pf
+
+# if the file drew.pf.ssh-bruteforce.expire.plist exists,
+# then add 'launchctl unload' command before 'launchctl load'
+- name: '[Darwin] check if the ssh brutforce table plist exists'
+  stat: path=/Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+  register: pf_ssh_bf_tbl_plist
+  tags:
+    - pf
+
+- name: '[Darwin] Create launchd job for clearing ssh-bruteforce'
+  template:
+    src: launchd/drew.pf.ssh-bruteforce.expire.plist.j2
+    dest: /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+  tags:
+    - pf
+
+# if the file drew.pf.emerging-threats.update.plist exists,
+# then add 'launchctl unload' command before 'launchctl load'
+- name: '[Darwin] check if the launchd job for updating the emerging-threats exists'
+  stat: path=/Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+  register: pf_eto_update_plist
+  tags:
+    - pf
+
+- name: '[Darwin] Create launchd job for updating the emerging-threats'
+  template:
+    src: launchd/drew.pf.emerging-threats.update.plist.j2
+    dest: /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+  tags:
+    - pf
+
+...
