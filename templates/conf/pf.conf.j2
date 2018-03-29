@@ -7,8 +7,8 @@ include "/etc/pf.conf"
 #====== OPTIONS end ======#
 
 #=== TRANSLATION start ===#
-#rdr-anchor "httpd_fwd"
-#load anchor "httpd_fwd" from "/etc/pf.anchors/httpd_fwd.rules"
+rdr-anchor "httpd.fwd"
+load anchor "httpd.fwd" from "/etc/pf.anchors/httpd.fwd.rules"
 #==== TRANSLATION end ====#
 
 #==== FILTERING start ====#

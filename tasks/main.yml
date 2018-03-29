@@ -81,6 +81,18 @@
   tags:
     - pf
 
+- name: "[main] Generate /etc/pf.anchors/drew.httpd.fwd.rules from template"
+  template:
+    src: conf/pf.anchors/drew.httpd.fwd.rules.j2
+    dest: /etc/pf.anchors/drew.httpd.fwd.rules
+    owner: root
+    group: wheel
+    mode: 0644
+  become: yes
+  notify: Reload pfctl
+  tags:
+    - pf
+
 - meta: flush_handlers
   tags:
     - pf
