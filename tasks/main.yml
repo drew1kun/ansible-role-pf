@@ -81,10 +81,10 @@
   tags:
     - pf
 
-- name: "[main] Generate /etc/pf.anchors/drew.httpd.fwd.rules from template"
+- name: "[main] Generate /etc/pf.anchors/drew.fwd.httpd.rules from template"
   template:
-    src: conf/pf.anchors/drew.httpd.fwd.rules.j2
-    dest: /etc/pf.anchors/drew.httpd.fwd.rules
+    src: conf/pf.anchors/drew.fwd.httpd.rules.j2
+    dest: /etc/pf.anchors/drew.fwd.httpd.rules
     owner: root
     group: wheel
     mode: 0644
