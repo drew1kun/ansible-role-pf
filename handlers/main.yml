@@ -9,12 +9,16 @@
   when:
     - ansible_os_family == 'Darwin'
     - pf_ssh_bf_tbl_plist.stat.exists
+  tags:
+    - pf
 
 - name: Load /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   command: launchctl load -w /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   become: yes
   listen: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   when: ansible_os_family == 'Darwin'
+  tags:
+    - pf
 
 
 # emerging-threats job
@@ -25,12 +29,16 @@
   when:
     - ansible_os_family == 'Darwin'
     - pf_eto_update_plist.stat.exists
+  tags:
+    - pf
 
 - name: Load /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   command: launchctl load -w /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   become: yes
   listen: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   when: ansible_os_family == 'Darwin'
+  tags:
+    - pf
 
 
 # pfctl job
@@ -39,10 +47,14 @@
   become: yes
   listen: Reload pfctl
   when: ansible_os_family == 'Darwin'
+  tags:
+    - pf
 
 - name: Load /System/Library/LaunchDaemons/com.apple.pfctl.plist
   command: launchctl load /System/Library/LaunchDaemons/com.apple.pfctl.plist
   become: yes
   listen: Reload pfctl
   when: ansible_os_family == 'Darwin'
+  tags:
+    - pf
 ...

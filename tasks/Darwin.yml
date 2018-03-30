@@ -5,6 +5,19 @@
   tags:
     - pf
 
+# Unfortunately translations must be set before the first filtering anchor appears in configuration.
+# In this case there is no other choice then to modify system /etc/pf.conf which may be overwritten
+# during future system updates.
+- name: '[Darwin] Modify translations adding custom httpd redirect anchor for web developers'
+  replace:
+    path: /etc/pf.conf
+    regexp: '^(rdr-anchor.*\n)^(rdr-anchor)(.*\$)'
+    replace: '\1rdr-anchor "drew.fwd.sshd"\nload anchor "drew.fwd.sshd" from "/etc/pf.anchors/drew.fwd.httpd.rules"\n\2\3'
+  become: yes
+  notify: Reload /System/Library/LaunchDaemons/com.apple.pfctl.plist
+  tags:
+    - pf
+
 - name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
   replace:
     path: /System/Library/LaunchDaemons/com.apple.pfctl.plist

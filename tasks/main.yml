@@ -57,7 +57,7 @@
   tags:
     - pf
 
-- name: "Download Emerging Threads Open Ruleset"
+- name: "[main] Download Emerging Threads Open Ruleset"
   get_url:
     url: http://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt
     dest: /etc/emerging-Block-IPs.txt
@@ -92,6 +92,8 @@
   notify: Reload pfctl
   tags:
     - pf
+
+
 
 - meta: flush_handlers
   tags:
