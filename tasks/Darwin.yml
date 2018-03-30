@@ -11,7 +11,8 @@
 - name: '[Darwin] Modify translations adding custom httpd redirect anchor for web developers'
   replace:
     path: /etc/pf.conf
-    regexp: '^(rdr-anchor.*\n)^(rdr-anchor)(.*\$)'
+    #regexp: '^(rdr-anchor.*\n)^(rdr-anchor)(.*\$)'
+    regexp: '^(rdr-anchor.*\n)(.*\$)'
     replace: '\1rdr-anchor "drew.fwd.sshd"\nload anchor "drew.fwd.sshd" from "/etc/pf.anchors/drew.fwd.httpd.rules"\n\2\3'
   become: yes
   notify: Reload /System/Library/LaunchDaemons/com.apple.pfctl.plist
