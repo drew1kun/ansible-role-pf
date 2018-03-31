@@ -77,5 +77,4 @@
   when: pf_emerging_threats_protect
   tags:
     - pf
-
 ...
