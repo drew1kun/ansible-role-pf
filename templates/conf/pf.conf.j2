@@ -14,6 +14,10 @@ load anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules"
 
 {% endif %}
 #==== FILTERING start ====#
+{% if not pf_ssh_bruteforce_protect %}
+# SSH (necessary for ansible)
+pass in log quick proto tcp to any port ssh flags S/SA keep state
+{% endif %}
 anchor "drew"
 load anchor "drew" from "/etc/pf.anchors/drew.rules"
 {% if pf_ssh_bruteforce_protect %}

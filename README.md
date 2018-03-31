@@ -33,7 +33,7 @@ files.
 If choosing to set variable `pf_ssh_bruteforce_protect: no` then consider adding the rule for allowing ssh.
 For example:
 
-    pass in quick proto tcp to any port ssh flags S/SA keep state
+    pass in log quick proto tcp to any port ssh flags S/SA keep state
 
 Otherwise you may end up having ssh connection blocked
 

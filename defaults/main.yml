@@ -3,8 +3,8 @@
 
 pf_conf: /etc/pf.conf
 
-pf_emerging_threats_protect: yes
 pf_ssh_bruteforce_protect: yes
+pf_emerging_threats_protect: yes
 
 # User-defined variables
 pf_macros: |
