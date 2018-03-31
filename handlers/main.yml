@@ -57,4 +57,14 @@
   when: ansible_os_family == 'Darwin'
   tags:
     - pf
+
+- name: Warning message
+  debug:
+    msg: |
+      Attention, the MacOS system /etc/pf.conf was modified.
+      Custom redirect anchor was added.
+      Please be noted that this file may be overwritten during future system updates.
+      I know no ways to add custom redirect anchors on MacOS without modifying original /etc/pf.conf
+  tags:
+    - pf
 ...

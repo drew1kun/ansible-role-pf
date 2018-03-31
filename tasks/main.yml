@@ -81,19 +81,18 @@
   tags:
     - pf
 
-- name: "[main] Generate /etc/pf.anchors/drew.fwd.httpd.rules from template"
+- name: "[main] Generate /etc/pf.anchors/drew.rdr.rules from template"
   template:
-    src: conf/pf.anchors/drew.fwd.httpd.rules.j2
-    dest: /etc/pf.anchors/drew.fwd.httpd.rules
+    src: conf/pf.anchors/drew.rdr.rules.j2
+    dest: /etc/pf.anchors/drew.rdr.rules
     owner: root
     group: wheel
     mode: 0644
   become: yes
   notify: Reload pfctl
+  when: pf_translation != None
   tags:
     - pf
-
-
 
 - meta: flush_handlers
   tags:

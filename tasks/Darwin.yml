@@ -8,14 +8,19 @@
 # Unfortunately translations must be set before the first filtering anchor appears in configuration.
 # In this case there is no other choice then to modify system /etc/pf.conf which may be overwritten
 # during future system updates.
-- name: '[Darwin] Modify translations adding custom httpd redirect anchor for web developers'
-  replace:
+#
+- name: '[Darwin] Modify /etc/pf.conf adding custom redirect anchor'
+  blockinfile:
     path: /etc/pf.conf
-    #regexp: '^(rdr-anchor.*\n)^(rdr-anchor)(.*\$)'
-    regexp: '^(rdr-anchor.*\n)(.*\$)'
-    replace: '\1rdr-anchor "drew.fwd.sshd"\nload anchor "drew.fwd.sshd" from "/etc/pf.anchors/drew.fwd.httpd.rules"\n\2\3'
+    regexp: '^(rdr-anchor "drew.rdr"\nload anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules")'
+    block: |
+      rdr-anchor "drew.rdr"
+      load anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules"
+    insertafter: '^(rdr-anchor "com.apple/\*)"'
   become: yes
-  notify: Reload /System/Library/LaunchDaemons/com.apple.pfctl.plist
+  notify:
+    - Reload pfctl
+    - Warning message
   tags:
     - pf
 
@@ -25,7 +30,7 @@
     regexp: '^(\s*<string>pfctl</string>\n\s*)<string>-.*f</string>(\n\s*<string>).*(</string>)'
     replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
   become: yes
-  notify: Reload /System/Library/LaunchDaemons/com.apple.pfctl.plist
+  notify: Reload pfctl
   tags:
     - pf
 

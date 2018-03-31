@@ -28,12 +28,10 @@
 #===== QUEUEING end ======#
 
 {% endif %}
-{% if pf_translation != None %}
-#=== TRANSLATION start ===#
-{{ pf_translation }}
-#==== TRANSLATION end ====#
-
-{% endif %}
+{#
+TRANSLATION is moved to drew.rdr.rules anchor for flexibility,
+because the redirect anchors must go first
+#}
 {% if pf_filtering != None %}
 #==== FILTERING start ====#
 {{ pf_filtering }}
