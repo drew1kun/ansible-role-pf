@@ -39,6 +39,7 @@
 - name: '[Darwin] check if the ssh brutforce table plist exists'
   stat: path=/Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   register: pf_ssh_bf_tbl_plist
+  when: pf_ssh_bruteforce_protect
   tags:
     - pf
 
@@ -51,6 +52,7 @@
     mode: 0644
   become: yes
   notify: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+  when: pf_ssh_bruteforce_protect
   tags:
     - pf
 
@@ -59,6 +61,7 @@
 - name: '[Darwin] check if the launchd job for updating the emerging-threats exists'
   stat: path=/Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   register: pf_eto_update_plist
+  when: pf_emerging_threats_protect
   tags:
     - pf
 
@@ -71,6 +74,7 @@
     mode: 0644
   become: yes
   notify: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+  when: pf_emerging_threats_protect
   tags:
     - pf
 

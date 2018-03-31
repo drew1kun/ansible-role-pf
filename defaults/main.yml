@@ -3,6 +3,9 @@
 
 pf_conf: /etc/pf.conf
 
+pf_emerging_threats_protect: yes
+pf_ssh_bruteforce_protect: yes
+
 # User-defined variables
 pf_macros: |
   #interfaces:
@@ -25,7 +28,8 @@ pf_options: |
   set block-policy drop
 
 # provide a mechanism for increasing the performance and flexibility of rules
-# with large numbers of source or destination addresses
+# with large numbers of source or destination addresses.
+#
 pf_tables:
 
 

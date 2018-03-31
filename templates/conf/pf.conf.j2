@@ -16,10 +16,14 @@ load anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules"
 #==== FILTERING start ====#
 anchor "drew"
 load anchor "drew" from "/etc/pf.anchors/drew.rules"
+{% if pf_ssh_bruteforce_protect %}
 
 anchor "drew.sshd"
 load anchor "drew.sshd" from "/etc/pf.anchors/drew.sshd.rules"
+{% endif %}
+{% if pf_emerging_threats_protect %}
 
 anchor "drew.eto"
 load anchor "drew.eto" from "/etc/pf.anchors/drew.eto.rules"
+{% endif %}
 #===== FILTERING end =====#

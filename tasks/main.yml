@@ -54,6 +54,7 @@
     mode: 0644
   become: yes
   notify: Reload pfctl
+  when: pf_ssh_bruteforce_protect
   tags:
     - pf
 
@@ -66,6 +67,7 @@
     mode: 0644
   become: yes
   notify: Reload pfctl
+  when: pf_emerging_threats_protect
   tags:
     - pf
 
@@ -78,6 +80,7 @@
     mode: 0644
   become: yes
   notify: Reload pfctl
+  when: pf_emerging_threats_protect
   tags:
     - pf
 
