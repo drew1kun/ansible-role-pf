@@ -30,6 +30,12 @@ On MacOS 10.11+ (EI Captain) the System Integrity Protection must be disabled in
 files.
 
 **Reminder:** Ansible uses ssh so make sure the pf configuration does not block ssh
+If choosing to set variable `pf_ssh_bruteforce_protect: no` then consider adding the rule for allowing ssh.
+For example:
+
+    pass in quick proto tcp to any port ssh flags S/SA keep state
+
+Otherwise you may end up having ssh connection blocked
 
 Role Variables
 --------------
@@ -37,6 +43,8 @@ OS-Agnostic:
 
 | Variables | Description | Default|
 |-----------|-------------|--------|
+| **pf_ssh_bruteforce_protect** | Enable ssh bruteforce protection | `yes` |
+| **pf_emerging_threats_protect** | Enable ETOpen Ruleset configuration | `yes` |
 | **pf_macros** | Macros variables for pf configuration | see [`defaults/main.yml`](defaults/main.yml) |
 | **pf_tables** | pf configuration tables | see [`defaults/main.yml`](defaults/main.yml) |
 | **pf_options** | pf configuration options | see [`defaults/main.yml`](defaults/main.yml) |
