@@ -34,6 +34,6 @@ because pf blocks the ssh connection.
 {% if not pf_ssh_bruteforce_protect %}
 
 # SSH (necessary for ansible management)
-pass in log quick proto tcp to any port ssh flags S/SA keep state
+pass in log quick proto tcp to any port ssh keep state
 {% endif %}
 #===== FILTERING end =====#
