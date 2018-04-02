@@ -53,8 +53,10 @@ pf_queueing:
 # Redirect rules for port forwarding and NAT go here:
 pf_translation: |
   # HTTPd Port Forwarding
-  rdr pass inet proto tcp from any to any port 80 -> 127.0.0.1 port 8080
-  rdr pass inet proto tcp from any to any port 443 -> 127.0.0.1 port 8443
+  # comment 'set skip on lo' option and add 'pass on lo0 all' filtering rule
+  # in order the following rules to work:
+  #rdr pass inet proto tcp from any to any port 80 -> 127.0.0.1 port 8080
+  #rdr pass inet proto tcp from any to any port 443 -> 127.0.0.1 port 8443
 
 
 # Filtering rules go here:
