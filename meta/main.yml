@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: pf
   author: Andrew Shagayev
   description: |
     This role configures pf firewall creating custom anchors including ssh bruteforce protection anchor
