@@ -70,7 +70,7 @@ Example Playbook
     - hosts: dev_clients_macos
       gather_facts: yes
       roles:
-        - drew-kun.pf
+        - drew_kun.pf
 
 License
 -------
@@ -82,7 +82,7 @@ Author Information
 
 Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 
-[role-badge]: https://img.shields.io/badge/role-drew--kun.pf-green.svg
-[galaxy-link]: https://galaxy.ansible.com/drew-kun/pf/
+[role-badge]: https://img.shields.io/badge/role-drew__kun.pf-green.svg
+[galaxy-link]: https://galaxy.ansible.com/drew_kun/pf/
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-pf/master/LICENSE
+[mit-link]: https://raw.githubusercontent.com/drew_kun/ansible-pf/master/LICENSE

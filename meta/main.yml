@@ -19,9 +19,8 @@ galaxy_info:
   galaxy_tags:
     - pf
     - firewall
-    - MacOS
-    - OSX
-    - BSD
+    - macos
+    - bsd
 
 dependencies: []
 ...
