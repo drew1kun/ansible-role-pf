@@ -20,6 +20,7 @@ galaxy_info:
     - pf
     - firewall
     - macos
+    - osx
     - bsd
 
 dependencies: []
