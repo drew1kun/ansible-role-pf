@@ -4,8 +4,7 @@
 - name: "[main] Include Darwin-specific tasks"
   include_tasks: Darwin.yml
   when: ansible_os_family == 'Darwin'
-  tags:
-    - pf
+  tags: pf
 
 # MacOS:
 # The original MacOS pf.conf may be overwritten during system updates.
@@ -19,8 +18,7 @@
     mode: 0644
   become: yes
   notify: Reload pfctl
-  tags:
-    - pf
+  tags: pf
 
 - name: "[main] Create /etc/pf.anchors directory if it doesn't exist"
   file:
@@ -30,8 +28,7 @@
     group: wheel
     mode: 0755
   become: yes
-  tags:
-    - pf
+  tags: pf
 
 - name: "[main] Generate /etc/pf.anchors/drew.rules from template"
   template:
@@ -42,8 +39,7 @@
     mode: 0644
   become: yes
   notify: Reload pfctl
-  tags:
-    - pf
+  tags: pf
 
 - name: "[main] Generate /etc/pf.anchors/drew.sshd.rules from template"
   template:
@@ -55,8 +51,7 @@
   become: yes
   notify: Reload pfctl
   when: pf_ssh_bruteforce_protect
-  tags:
-    - pf
+  tags: pf
 
 - name: "[main] Download Emerging Threads Open Ruleset"
   get_url:
@@ -68,8 +63,7 @@
   become: yes
   notify: Reload pfctl
   when: pf_emerging_threats_protect
-  tags:
-    - pf
+  tags: pf
 
 - name: "[main] Generate /etc/pf.anchors/drew.eto.rules from template"
   template:
@@ -81,8 +75,7 @@
   become: yes
   notify: Reload pfctl
   when: pf_emerging_threats_protect
-  tags:
-    - pf
+  tags: pf
 
 - name: "[main] Generate /etc/pf.anchors/drew.rdr.rules from template"
   template:
@@ -94,10 +87,8 @@
   become: yes
   notify: Reload pfctl
   when: pf_translation != None
-  tags:
-    - pf
+  tags: pf
 
 - meta: flush_handlers
-  tags:
-    - pf
+  tags: pf
 ...

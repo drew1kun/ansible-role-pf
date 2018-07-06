@@ -2,8 +2,7 @@
 - name: "[Darwin] Include Darwin-specific variables"
   include_vars: Darwin.yml
   when: ansible_os_family == 'Darwin'
-  tags:
-    - pf
+  tags: pf
 
 # Unfortunately translations must be set before the first filtering anchor appears in configuration.
 # In this case there is no other choice then to modify system /etc/pf.conf which may be overwritten
@@ -21,8 +20,7 @@
   notify:
     - Reload pfctl
     - Warning message
-  tags:
-    - pf
+  tags: pf
 
 - name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
   replace:
@@ -31,8 +29,7 @@
     replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
   become: yes
   notify: Reload pfctl
-  tags:
-    - pf
+  tags: pf
 
 # if the file drew.pf.ssh-bruteforce.expire.plist exists,
 # then add 'launchctl unload' command before 'launchctl load'
@@ -40,8 +37,7 @@
   stat: path=/Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   register: pf_ssh_bf_tbl_plist
   when: pf_ssh_bruteforce_protect
-  tags:
-    - pf
+  tags: pf
 
 - name: '[Darwin] Create launchd job for clearing ssh-bruteforce'
   template:
@@ -53,17 +49,15 @@
   become: yes
   notify: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   when: pf_ssh_bruteforce_protect
-  tags:
-    - pf
+  tags: pf
 
 # if the file drew.pf.emerging-threats.update.plist exists,
 # then add 'launchctl unload' command before 'launchctl load'
-- name: '[Darwin] check if the launchd job for updating the emerging-threats exists'
+- name: '[Darwin] Check if the launchd job for updating the emerging-threats exists'
   stat: path=/Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   register: pf_eto_update_plist
   when: pf_emerging_threats_protect
-  tags:
-    - pf
+  tags: pf
 
 - name: '[Darwin] Create launchd job for updating the emerging-threats'
   template:
@@ -75,6 +69,5 @@
   become: yes
   notify: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   when: pf_emerging_threats_protect
-  tags:
-    - pf
+  tags: pf
 ...

@@ -5,6 +5,6 @@ table <ssh_bruteforce> persist
 #==== FILTERING start ====#
 block log quick from <ssh_bruteforce>
 pass in inet proto tcp to any port ssh flags S/SA keep state \
-	(max-src-conn 5, max-src-conn-rate 5/5, \
+	(max-src-conn 4, max-src-conn-rate 5/60, \
 	overload <ssh_bruteforce> flush global)
 #===== FILTERING end =====#

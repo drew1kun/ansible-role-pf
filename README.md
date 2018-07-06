@@ -86,3 +86,17 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [galaxy-link]: https://galaxy.ansible.com/drew-kun/pf/
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-pf/master/LICENSE
+
+## TO-DO
+
+Handler `Load /System/Library/LaunchDaemons/com.apple.pfctl.plist` returns the error:
+    No handlers could be found for logger "paramiko.transport"
+    fatal: [laptop]: UNREACHABLE! => {"changed": false, "msg": "Failed to open session: [Errno 60] Operation timed
+    out", "unreachable": true}
+
+This may happen due to the `ssh_bruteforce` table.
+
+Waiting for [launchd ansible module pull request][https://github.com/ansible/ansible/pull/20881/files] to be approved.
+
+
+

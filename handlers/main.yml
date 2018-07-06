@@ -9,17 +9,12 @@
   when:
     - ansible_os_family == 'Darwin'
     - pf_ssh_bf_tbl_plist.stat.exists
-  tags:
-    - pf
 
 - name: Load /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   command: launchctl load -w /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   become: yes
   listen: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   when: ansible_os_family == 'Darwin'
-  tags:
-    - pf
-
 
 # emerging-threats job
 - name: Unload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
@@ -29,17 +24,12 @@
   when:
     - ansible_os_family == 'Darwin'
     - pf_eto_update_plist.stat.exists
-  tags:
-    - pf
 
 - name: Load /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   command: launchctl load -w /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   become: yes
   listen: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   when: ansible_os_family == 'Darwin'
-  tags:
-    - pf
-
 
 # pfctl job
 - name: Unload /System/Library/LaunchDaemons/com.apple.pfctl.plist
@@ -47,16 +37,12 @@
   become: yes
   listen: Reload pfctl
   when: ansible_os_family == 'Darwin'
-  tags:
-    - pf
 
 - name: Load /System/Library/LaunchDaemons/com.apple.pfctl.plist
   command: launchctl load /System/Library/LaunchDaemons/com.apple.pfctl.plist
   become: yes
   listen: Reload pfctl
   when: ansible_os_family == 'Darwin'
-  tags:
-    - pf
 
 - name: Warning message
   debug:
@@ -64,7 +50,5 @@
     - Attention, the MacOS system /etc/pf.conf was modified.
     - Custom redirect anchor was added.
     - Please be noted that this file may be overwritten during future system updates.
-    - I know no ways to add custom redirect anchors on MacOS without modifying original /etc/pf.conf
-  tags:
-    - pf
+    - It seems to be no ways to add custom redirect anchors on MacOS without modifying original /etc/pf.conf
 ...
