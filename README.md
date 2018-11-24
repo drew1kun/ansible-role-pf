@@ -67,10 +67,12 @@ None
 Example Playbook
 ----------------
 
-    - hosts: dev_clients_macos
-      gather_facts: yes
-      roles:
-        - drew-kun.pf
+```yaml
+- hosts: dev_clients_macos
+  gather_facts: yes
+  roles:
+  - drew-kun.pf
+```
 
 License
 -------
