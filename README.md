@@ -30,10 +30,9 @@ On MacOS 10.11+ (EI Captain) the System Integrity Protection must be disabled in
 files.
 
 **Reminder:** Ansible uses ssh so make sure the pf configuration does not block ssh
-If choosing to set variable `pf_ssh_bruteforce_protect: no` then consider adding the rule for allowing ssh.
 For example:
 
-    pass in log quick proto tcp to any port ssh flags S/SA keep state
+    pass in log proto tcp to any port ssh flags S/SA keep state
 
 Otherwise you may end up having ssh connection blocked
 
@@ -90,15 +89,4 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-pf/master/LICENSE
 
 ## TO-DO
-
-Handler `Load /System/Library/LaunchDaemons/com.apple.pfctl.plist` returns the error:
-    No handlers could be found for logger "paramiko.transport"
-    fatal: [laptop]: UNREACHABLE! => {"changed": false, "msg": "Failed to open session: [Errno 60] Operation timed
-    out", "unreachable": true}
-
-This may happen due to the `ssh_bruteforce` table.
-
 Waiting for [launchd ansible module pull request][https://github.com/ansible/ansible/pull/20881/files] to be approved.
-
-
-

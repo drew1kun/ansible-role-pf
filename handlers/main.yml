@@ -16,6 +16,7 @@
   listen: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   when: ansible_os_family == 'Darwin'
 
+
 # emerging-threats job
 - name: Unload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   command: launchctl unload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
@@ -31,17 +32,22 @@
   listen: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   when: ansible_os_family == 'Darwin'
 
+
 # pfctl job
 - name: Unload /System/Library/LaunchDaemons/com.apple.pfctl.plist
   command: launchctl unload /System/Library/LaunchDaemons/com.apple.pfctl.plist
   become: yes
   listen: Reload pfctl
-  when: ansible_os_family == 'Darwin'
+  when:
+  - ansible_os_family == 'Darwin'
+  - pf_launchd_job.rc == 0
 
 - name: Load /System/Library/LaunchDaemons/com.apple.pfctl.plist
-  command: launchctl load /System/Library/LaunchDaemons/com.apple.pfctl.plist
+  command: launchctl load -w /System/Library/LaunchDaemons/com.apple.pfctl.plist
   become: yes
   listen: Reload pfctl
+  async: 1  # prevent pf to block the ansible
+  poll: 0   # established ssh connection
   when: ansible_os_family == 'Darwin'
 
 - name: Warning message
@@ -51,4 +57,5 @@
     - Custom redirect anchor was added.
     - Please be noted that this file may be overwritten during future system updates.
     - It seems to be no ways to add custom redirect anchors on MacOS without modifying original /etc/pf.conf
+  when: ansible_os_family == 'Darwin'
 ...

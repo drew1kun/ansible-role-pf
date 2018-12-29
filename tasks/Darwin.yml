@@ -1,13 +1,11 @@
 ---
 - name: "[Darwin] Include Darwin-specific variables"
   include_vars: Darwin.yml
-  when: ansible_os_family == 'Darwin'
   tags: pf
 
 # Unfortunately translations must be set before the first filtering anchor appears in configuration.
 # In this case there is no other choice then to modify system /etc/pf.conf which may be overwritten
 # during future system updates.
-#
 - name: '[Darwin] Modify /etc/pf.conf adding custom redirect anchor'
   blockinfile:
     path: /etc/pf.conf
@@ -18,8 +16,8 @@
     insertafter: '^(rdr-anchor "com.apple/\*)"'
   become: yes
   notify:
-    - Reload pfctl
-    - Warning message
+  - Reload pfctl
+  - Warning message
   tags: pf
 
 - name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
@@ -33,7 +31,7 @@
 
 # if the file drew.pf.ssh-bruteforce.expire.plist exists,
 # then add 'launchctl unload' command before 'launchctl load'
-- name: '[Darwin] check if the ssh brutforce table plist exists'
+- name: '[Darwin] Check if the ssh brutforce table plist exists'
   stat: path=/Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
   register: pf_ssh_bf_tbl_plist
   when: pf_ssh_bruteforce_protect
@@ -70,4 +68,14 @@
   notify: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
   when: pf_emerging_threats_protect
   tags: pf
+
+# This check is needed unconditionally.
+# Even if no files were changed, pf can still be disabled, so we sould enable it in this case.
+- name: Check if /System/Library/LaunchDaemons/com.apple.pfctl.plist job is loaded (yellow if not)
+  shell: launchctl list | grep -q com.apple.pfctl
+  become: yes
+  register: pf_launchd_job
+  failed_when: false
+  changed_when: pf_launchd_job.rc == 1  # trigger the 'Load pfctl' handler if job is not loaded
+  notify: Load /System/Library/LaunchDaemons/com.apple.pfctl.plist
 ...

@@ -26,14 +26,4 @@ load anchor "drew.sshd" from "/etc/pf.anchors/drew.sshd.rules"
 anchor "drew.eto"
 load anchor "drew.eto" from "/etc/pf.anchors/drew.eto.rules"
 {% endif %}
-{#
-SSH rule is needed only when ssh bruteforce protection is disabled.
-This eliminates the issue when 'launchctl load pfctl' hangs during ansible task,
-because pf blocks the ssh connection.
-#}
-{% if not pf_ssh_bruteforce_protect %}
-
-# SSH (necessary for ansible management)
-pass in log quick proto tcp to any port ssh keep state
-{% endif %}
 #===== FILTERING end =====#

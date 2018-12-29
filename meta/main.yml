@@ -13,16 +13,14 @@ galaxy_info:
   github_branch: master
 
   platforms:
-    - name: MacOSX
-      versions:
-        - all
+  - name: MacOSX
+    versions:
+    - all
 
   galaxy_tags:
-    - pf
-    - firewall
-    - macos
-    - osx
-    - bsd
-
-dependencies: []
+  - pf
+  - firewall
+  - macos
+  - osx
+  - bsd
 ...

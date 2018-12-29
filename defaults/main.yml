@@ -19,6 +19,10 @@ pf_macros: |
   dns="53"
   ntp="123"
 
+pf_ipv4_whitelist:
+- 192.168.1.10
+- 192.168.1.11
+
 # Options tune the behavior of the packet filtering engine
 pf_options: |
   set fingerprints "/etc/pf.os"
@@ -30,8 +34,9 @@ pf_options: |
 # provide a mechanism for increasing the performance and flexibility of rules
 # with large numbers of source or destination addresses.
 #
-pf_tables:
-
+pf_tables: |
+  #Example of ip whitelist table:
+  #table <whitelist> { {% for ip in pf_ipv4_whitelist %}{{ ip }}{% if loop.last == False %}, {% endif %}{% endfor %} }
 
 pf_normalization: |
   # Set ruleset optimization to "profile", so it is adjusted based on traffic profile.
@@ -61,11 +66,18 @@ pf_translation: |
 
 # Filtering rules go here:
 pf_filtering: |
-  block log all
+  #block log all
 
-  # INCOMING TRAFFIC
+  ### INCOMING TRAFFIC
   # Block to/from illegal destinations or sources
   block in log quick from no-route to any
+
+  # 'block log all' causes launchctl load pfctl.plist handler to fail open ssh session
+  # it also causes problems when sniffing with ettercap
+  block in log
+
+  # SSH
+  pass in proto tcp to any port ssh flags S/SA keep state
 
   # WOL magic packets
   pass in quick proto udp from any to any port $wol keep state
@@ -84,10 +96,11 @@ pf_filtering: |
 
   # ICMP from home LANs and WLANs
   pass in inet proto icmp from 10.8.0.0/24     # Ovpn subnet
+  pass in inet proto icmp from 192.168.0.0/24
   pass in inet proto icmp from 192.168.1.0/24
   pass in inet proto icmp from 192.168.2.0/24
   pass in inet proto icmp from 172.16.42.0/24
 
-
-  # OUTCOMING TRAFFIC
-  pass out all
+  ### OUTCOMING TRAFFIC
+  # only needed if using 'block log all'
+  #pass out all
