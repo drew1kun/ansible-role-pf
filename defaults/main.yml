@@ -103,4 +103,4 @@ pf_filtering: |
 
   ### OUTCOMING TRAFFIC
   # only needed if using 'block log all'
-  #pass out all
+  pass out all
