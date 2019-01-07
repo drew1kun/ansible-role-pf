@@ -8,22 +8,22 @@ include "/etc/pf.conf"
 {% endif %}
 {% if ansible_os_family != 'Darwin' and pf_translation != None %}
 #=== TRANSLATION start ===#
-rdr-anchor "drew.rdr"
-load anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules"
+rdr-anchor "{{ pf_prefix }}.rdr"
+load anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules"
 #==== TRANSLATION end ====#
 
 {% endif %}
 #==== FILTERING start ====#
-anchor "drew"
-load anchor "drew" from "/etc/pf.anchors/drew.rules"
+anchor "{{ pf_prefix }}"
+load anchor "{{ pf_prefix }}" from "/etc/pf.anchors/{{ pf_prefix }}.rules"
 {% if pf_ssh_bruteforce_protect %}
 
-anchor "drew.sshd"
-load anchor "drew.sshd" from "/etc/pf.anchors/drew.sshd.rules"
+anchor "{{ pf_prefix }}.sshd"
+load anchor "{{ pf_prefix }}.sshd" from "/etc/pf.anchors/{{ pf_prefix }}.sshd.rules"
 {% endif %}
 {% if pf_emerging_threats_protect %}
 
-anchor "drew.eto"
-load anchor "drew.eto" from "/etc/pf.anchors/drew.eto.rules"
+anchor "{{ pf_prefix }}.eto"
+load anchor "{{ pf_prefix }}.eto" from "/etc/pf.anchors/{{ pf_prefix }}.eto.rules"
 {% endif %}
 #===== FILTERING end =====#

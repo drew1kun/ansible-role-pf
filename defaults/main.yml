@@ -3,6 +3,8 @@
 
 pf_conf: /etc/pf.conf
 
+pf_prefix: "{{ ansible_user_id }}"
+
 pf_ssh_bruteforce_protect: yes
 pf_emerging_threats_protect: yes
 

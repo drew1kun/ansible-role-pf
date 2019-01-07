@@ -1,2 +1,2 @@
 ---
-pf_conf: /etc/pf.drew.conf
+pf_conf: "/etc/pf.{{ pf_prefix }}.conf"

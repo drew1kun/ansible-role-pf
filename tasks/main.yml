@@ -8,7 +8,7 @@
 
 # MacOS:
 # The original MacOS pf.conf may be overwritten during system updates.
-# So we will create a custom pf.drew.conf and include the original pf.conf in it.
+# So we will create a custom pf.{{ pf_prefix }}.conf and include the original pf.conf in it.
 - name: "[main] Generate {{ pf_conf }} from template"
   template:
     src: conf/pf.conf.j2
@@ -30,10 +30,10 @@
   become: yes
   tags: pf
 
-- name: "[main] Generate /etc/pf.anchors/drew.rules from template"
+- name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.rules from template"
   template:
-    src: conf/pf.anchors/drew.rules.j2
-    dest: /etc/pf.anchors/drew.rules
+    src: conf/pf.anchors/prefix.rules.j2
+    dest: /etc/pf.anchors/{{ pf_prefix }}.rules
     owner: root
     group: wheel
     mode: 0644
@@ -41,10 +41,10 @@
   notify: Reload pfctl
   tags: pf
 
-- name: "[main] Generate /etc/pf.anchors/drew.sshd.rules from template"
+- name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.sshd.rules from template"
   template:
-    src: conf/pf.anchors/drew.sshd.rules.j2
-    dest: /etc/pf.anchors/drew.sshd.rules
+    src: conf/pf.anchors/prefix.sshd.rules.j2
+    dest: /etc/pf.anchors/{{ pf_prefix }}.sshd.rules
     owner: root
     group: wheel
     mode: 0644
@@ -65,10 +65,10 @@
   when: pf_emerging_threats_protect
   tags: pf
 
-- name: "[main] Generate /etc/pf.anchors/drew.eto.rules from template"
+- name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.eto.rules from template"
   template:
-    src: conf/pf.anchors/drew.eto.rules.j2
-    dest: /etc/pf.anchors/drew.eto.rules
+    src: conf/pf.anchors/prefix.eto.rules.j2
+    dest: /etc/pf.anchors/{{ pf_prefix }}.eto.rules
     owner: root
     group: wheel
     mode: 0644
@@ -77,10 +77,10 @@
   when: pf_emerging_threats_protect
   tags: pf
 
-- name: "[main] Generate /etc/pf.anchors/drew.rdr.rules from template"
+- name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.rdr.rules from template"
   template:
-    src: conf/pf.anchors/drew.rdr.rules.j2
-    dest: /etc/pf.anchors/drew.rdr.rules
+    src: conf/pf.anchors/prefix.rdr.rules.j2
+    dest: /etc/pf.anchors/{{ pf_prefix }}.rdr.rules
     owner: root
     group: wheel
     mode: 0644
