@@ -9,10 +9,10 @@
 - name: '[Darwin] Modify /etc/pf.conf adding custom redirect anchor'
   blockinfile:
     path: /etc/pf.conf
-    regexp: '^(rdr-anchor "drew.rdr"\nload anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules")'
+    regexp: '^(rdr-anchor "{{ pf_prefix }}.rdr"\nload anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules")'
     block: |
-      rdr-anchor "drew.rdr"
-      load anchor "drew.rdr" from "/etc/pf.anchors/drew.rdr.rules"
+      rdr-anchor "{{ pf_prefix }}.rdr"
+      load anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules"
     insertafter: '^(rdr-anchor "com.apple/\*)"'
   become: yes
   notify:
@@ -29,43 +29,43 @@
   notify: Reload pfctl
   tags: pf
 
-# if the file drew.pf.ssh-bruteforce.expire.plist exists,
+# if the file {{ pf_prefix }}.pf.ssh-bruteforce.expire.plist exists,
 # then add 'launchctl unload' command before 'launchctl load'
 - name: '[Darwin] Check if the ssh brutforce table plist exists'
-  stat: path=/Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+  stat: path="/Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
   register: pf_ssh_bf_tbl_plist
   when: pf_ssh_bruteforce_protect
   tags: pf
 
 - name: '[Darwin] Create launchd job for clearing ssh-bruteforce'
   template:
-    src: launchd/drew.pf.ssh-bruteforce.expire.plist.j2
-    dest: /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+    src: launchd/prefix.pf.ssh-bruteforce.expire.plist.j2
+    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
     owner: root
     group: wheel
     mode: 0644
   become: yes
-  notify: Reload /Library/LaunchDaemons/drew.pf.ssh-bruteforce.expire.plist
+  notify: Reload /Library/LaunchDaemons/prefix.pf.ssh-bruteforce.expire.plist
   when: pf_ssh_bruteforce_protect
   tags: pf
 
-# if the file drew.pf.emerging-threats.update.plist exists,
+# if the file {{ pf_prefix }}.pf.emerging-threats.update.plist exists,
 # then add 'launchctl unload' command before 'launchctl load'
 - name: '[Darwin] Check if the launchd job for updating the emerging-threats exists'
-  stat: path=/Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+  stat: path="/Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
   register: pf_eto_update_plist
   when: pf_emerging_threats_protect
   tags: pf
 
 - name: '[Darwin] Create launchd job for updating the emerging-threats'
   template:
-    src: launchd/drew.pf.emerging-threats.update.plist.j2
-    dest: /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+    src: launchd/prefix.pf.emerging-threats.update.plist.j2
+    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
     owner: root
     group: wheel
     mode: 0644
   become: yes
-  notify: Reload /Library/LaunchDaemons/drew.pf.emerging-threats.update.plist
+  notify: Reload /Library/LaunchDaemons/prefix.pf.emerging-threats.update.plist
   when: pf_emerging_threats_protect
   tags: pf
 

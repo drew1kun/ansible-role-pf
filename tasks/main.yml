@@ -33,7 +33,7 @@
 - name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.rules from template"
   template:
     src: conf/pf.anchors/prefix.rules.j2
-    dest: /etc/pf.anchors/{{ pf_prefix }}.rules
+    dest: "/etc/pf.anchors/{{ pf_prefix }}.rules"
     owner: root
     group: wheel
     mode: 0644
@@ -44,7 +44,7 @@
 - name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.sshd.rules from template"
   template:
     src: conf/pf.anchors/prefix.sshd.rules.j2
-    dest: /etc/pf.anchors/{{ pf_prefix }}.sshd.rules
+    dest: "/etc/pf.anchors/{{ pf_prefix }}.sshd.rules"
     owner: root
     group: wheel
     mode: 0644
@@ -68,7 +68,7 @@
 - name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.eto.rules from template"
   template:
     src: conf/pf.anchors/prefix.eto.rules.j2
-    dest: /etc/pf.anchors/{{ pf_prefix }}.eto.rules
+    dest: "/etc/pf.anchors/{{ pf_prefix }}.eto.rules"
     owner: root
     group: wheel
     mode: 0644
@@ -80,7 +80,7 @@
 - name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.rdr.rules from template"
   template:
     src: conf/pf.anchors/prefix.rdr.rules.j2
-    dest: /etc/pf.anchors/{{ pf_prefix }}.rdr.rules
+    dest: "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules"
     owner: root
     group: wheel
     mode: 0644
