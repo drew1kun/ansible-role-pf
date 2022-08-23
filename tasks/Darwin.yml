@@ -20,14 +20,14 @@
   - Warning message
   tags: pf
 
-- name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
-  replace:
-    path: /System/Library/LaunchDaemons/com.apple.pfctl.plist
-    regexp: '^(\s*<string>pfctl</string>\n\s*)<string>-.*f</string>(\n\s*<string>).*(</string>)'
-    replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
-  become: yes
-  notify: Reload pfctl
-  tags: pf
+##- name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
+#  replace:
+#    path: /System/Library/LaunchDaemons/com.apple.pfctl.plist
+#    regexp: '^(\s*<string>pfctl</string>\n\s*)<string>-.*f</string>(\n\s*<string>).*(</string>)'
+#    replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
+#  become: yes
+#  notify: Reload pfctl
+#  tags: pf
 
 # if the file {{ pf_prefix }}.pf.ssh-bruteforce.expire.plist exists,
 # then add 'launchctl unload' command before 'launchctl load'
@@ -78,4 +78,3 @@
   failed_when: false
   changed_when: pf_launchd_job.rc == 1  # trigger the 'Load pfctl' handler if job is not loaded
   notify: Load /System/Library/LaunchDaemons/com.apple.pfctl.plist
-...

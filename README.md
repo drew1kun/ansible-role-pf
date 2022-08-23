@@ -74,7 +74,7 @@ Example Playbook
 - hosts: dev_clients_macos
   gather_facts: yes
   roles:
-  - drew-kun.pf
+  - drew1kun.pf
 ```
 
 License
@@ -88,9 +88,9 @@ Author Information
 Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 
 [role-badge]: https://img.shields.io/badge/role-drew--kun.pf-green.svg
-[galaxy-link]: https://galaxy.ansible.com/drew-kun/pf/
+[galaxy-link]: https://galaxy.ansible.com/drew1kun/pf/
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-pf/master/LICENSE
+[mit-link]: https://raw.githubusercontent.com/drew1kun/ansible-pf/master/LICENSE
 
 ## TO-DO
 Waiting for [launchd ansible module pull request][https://github.com/ansible/ansible/pull/20881/files] to be approved.

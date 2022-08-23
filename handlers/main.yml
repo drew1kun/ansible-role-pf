@@ -58,4 +58,3 @@
     - Please be noted that this file may be overwritten during future system updates.
     - It seems to be no ways to add custom redirect anchors on MacOS without modifying original /etc/pf.conf
   when: ansible_os_family == 'Darwin'
-...
