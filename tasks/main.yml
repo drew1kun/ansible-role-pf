@@ -16,7 +16,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload pfctl
   tags: pf
 
@@ -27,7 +27,7 @@
     owner: root
     group: wheel
     mode: 0755
-  become: yes
+  become: true
   tags: pf
 
 - name: "[main] Generate /etc/pf.anchors/{{ pf_prefix }}.rules from template"
@@ -37,7 +37,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload pfctl
   tags: pf
 
@@ -48,7 +48,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload pfctl
   when: pf_ssh_bruteforce_protect
   tags: pf
@@ -60,7 +60,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload pfctl
   when: pf_emerging_threats_protect
   tags: pf
@@ -72,7 +72,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload pfctl
   when: pf_emerging_threats_protect
   tags: pf
@@ -84,7 +84,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload pfctl
   when: pf_translation != None
   tags: pf

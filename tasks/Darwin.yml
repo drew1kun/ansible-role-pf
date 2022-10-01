@@ -14,7 +14,7 @@
       rdr-anchor "{{ pf_prefix }}.rdr"
       load anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules"
     insertafter: '^(rdr-anchor "com.apple/\*)"'
-  become: yes
+  become: true
   notify:
   - Reload pfctl
   - Warning message
@@ -25,7 +25,7 @@
 #    path: /System/Library/LaunchDaemons/com.apple.pfctl.plist
 #    regexp: '^(\s*<string>pfctl</string>\n\s*)<string>-.*f</string>(\n\s*<string>).*(</string>)'
 #    replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
-#  become: yes
+#  become: true
 #  notify: Reload pfctl
 #  tags: pf
 
@@ -44,7 +44,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload /Library/LaunchDaemons/prefix.pf.ssh-bruteforce.expire.plist
   when: pf_ssh_bruteforce_protect
   tags: pf
@@ -64,7 +64,7 @@
     owner: root
     group: wheel
     mode: 0644
-  become: yes
+  become: true
   notify: Reload /Library/LaunchDaemons/prefix.pf.emerging-threats.update.plist
   when: pf_emerging_threats_protect
   tags: pf
@@ -73,7 +73,7 @@
 # Even if no files were changed, pf can still be disabled, so we sould enable it in this case.
 - name: Check if /System/Library/LaunchDaemons/com.apple.pfctl.plist job is loaded (yellow if not)
   shell: launchctl list | grep -q com.apple.pfctl
-  become: yes
+  become: true
   register: pf_launchd_job
   failed_when: false
   changed_when: pf_launchd_job.rc == 1  # trigger the 'Load pfctl' handler if job is not loaded
