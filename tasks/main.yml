@@ -1,14 +1,10 @@
 ---
 # tasks file for ansible-pf
 
-- name: "[main] Include Darwin-specific tasks"
-  include_tasks: Darwin.yml
-  when: ansible_os_family == 'Darwin'
+- name: "[main] Include {{ ansible_os_family }}-specific tasks"
+  include_tasks: "{{ ansible_os_family | lower }}.yml"
   tags: pf
 
-# MacOS:
-# The original MacOS pf.conf may be overwritten during system updates.
-# So we will create a custom pf.{{ pf_prefix }}.conf and include the original pf.conf in it.
 - name: "[main] Generate {{ pf_conf }} from template"
   template:
     src: conf/pf.conf.j2

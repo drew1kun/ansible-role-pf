@@ -1,80 +1,63 @@
 ---
-- name: "[Darwin] Include Darwin-specific variables"
-  include_vars: Darwin.yml
+- name: "[Darwin] Include {{ ansible_os_family }}-specific variables"
+  include_vars: darwin.yml
   tags: pf
 
-# Unfortunately translations must be set before the first filtering anchor appears in configuration.
-# In this case there is no other choice then to modify system /etc/pf.conf which may be overwritten
-# during future system updates.
-- name: '[Darwin] Modify /etc/pf.conf adding custom redirect anchor'
-  blockinfile:
-    path: /etc/pf.conf
-    regexp: '^(rdr-anchor "{{ pf_prefix }}.rdr"\nload anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules")'
-    block: |
-      rdr-anchor "{{ pf_prefix }}.rdr"
-      load anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules"
-    insertafter: '^(rdr-anchor "com.apple/\*)"'
+- name: '[Darwin] Create /usr/local/bin/firewall.sh script for running PF correctly'
+  template:
+    src: launchd/firewall.sh.j2
+    dest: "/usr/local/bin/firewall.sh"
+    owner: root
+    group: wheel
+    mode: 0755
   become: true
-  notify:
-  - Reload pfctl
-  - Warning message
+  notify: Reload pfctl
   tags: pf
 
-##- name: '[Darwin] Modify the /System/Library/LaunchDaemons/com.apple.pfctl.plist'
-#  replace:
-#    path: /System/Library/LaunchDaemons/com.apple.pfctl.plist
-#    regexp: '^(\s*<string>pfctl</string>\n\s*)<string>-.*f</string>(\n\s*<string>).*(</string>)'
-#    replace: '\1<string>-Ef</string>\2{{ pf_conf }}\3'
-#  become: true
-#  notify: Reload pfctl
-#  tags: pf
-
-# if the file {{ pf_prefix }}.pf.ssh-bruteforce.expire.plist exists,
-# then add 'launchctl unload' command before 'launchctl load'
-- name: '[Darwin] Check if the ssh brutforce table plist exists'
-  stat: path="/Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
-  register: pf_ssh_bf_tbl_plist
-  when: pf_ssh_bruteforce_protect
+- name: '[Darwin] Create launchd job for enabling pf at boot'
+  template:
+    src: launchd/prefix.pf.plist.j2
+    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.plist"
+    owner: root
+    group: wheel
+    mode: 0644
+  become: true
+  notify: Reload pfctl
   tags: pf
 
 - name: '[Darwin] Create launchd job for clearing ssh-bruteforce'
   template:
-    src: launchd/prefix.pf.ssh-bruteforce.expire.plist.j2
-    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
+    src: launchd/prefix.pf.ssh-bruteforce.table-expire.plist.j2
+    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.table-expire.plist"
     owner: root
     group: wheel
     mode: 0644
   become: true
-  notify: Reload /Library/LaunchDaemons/prefix.pf.ssh-bruteforce.expire.plist
+  notify: Reload pf.ssh-bruteforce.table-expire plist
   when: pf_ssh_bruteforce_protect
-  tags: pf
-
-# if the file {{ pf_prefix }}.pf.emerging-threats.update.plist exists,
-# then add 'launchctl unload' command before 'launchctl load'
-- name: '[Darwin] Check if the launchd job for updating the emerging-threats exists'
-  stat: path="/Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
-  register: pf_eto_update_plist
-  when: pf_emerging_threats_protect
   tags: pf
 
 - name: '[Darwin] Create launchd job for updating the emerging-threats'
   template:
-    src: launchd/prefix.pf.emerging-threats.update.plist.j2
-    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
+    src: launchd/prefix.pf.emerging-threats.rules-update.plist.j2
+    dest: "/Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.rules-update.plist"
     owner: root
     group: wheel
     mode: 0644
   become: true
-  notify: Reload /Library/LaunchDaemons/prefix.pf.emerging-threats.update.plist
   when: pf_emerging_threats_protect
+  notify: Reload pf.emerging-threats.rules-update plist
   tags: pf
 
-# This check is needed unconditionally.
-# Even if no files were changed, pf can still be disabled, so we sould enable it in this case.
-- name: Check if /System/Library/LaunchDaemons/com.apple.pfctl.plist job is loaded (yellow if not)
-  shell: launchctl list | grep -q com.apple.pfctl
+# This check is required unconditionally.
+# Even if no files were changed, pf can still be disabled, so we should enable it in this case.
+- name: '[Darwin] Check if {{ pf_prefix }} launchd jobs are loaded (yellow if not)'
+  shell: launchctl list | grep {{ pf_prefix }}
   become: true
   register: pf_launchd_job
   failed_when: false
   changed_when: pf_launchd_job.rc == 1  # trigger the 'Load pfctl' handler if job is not loaded
-  notify: Load /System/Library/LaunchDaemons/com.apple.pfctl.plist
+  notify:
+    - Reload pf.ssh-bruteforce.table-expire plist
+    - Reload pf.emerging-threats.rules-update plist
+    - Reload pfctl

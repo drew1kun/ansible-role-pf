@@ -2,9 +2,7 @@
 # defaults file for ansible-pf
 
 pf_conf: /etc/pf.conf
-
 pf_prefix: "{{ ansible_user_id }}"
-
 pf_ssh_bruteforce_protect: true
 pf_emerging_threats_protect: true
 
@@ -22,8 +20,8 @@ pf_macros: |
   ntp="123"
 
 pf_ipv4_whitelist:
-- 192.168.1.10
-- 192.168.1.11
+  - 192.168.1.10
+  - 192.168.1.11
 
 # Options tune the behavior of the packet filtering engine
 pf_options: |
@@ -59,11 +57,11 @@ pf_queueing:
 
 # Redirect rules for port forwarding and NAT go here:
 pf_translation: |
-  # HTTPd Port Forwarding
+  # HTTPd Port Forwarding for Web dev
   # comment 'set skip on lo' option and add 'pass on lo0 all' filtering rule
   # in order the following rules to work:
-  #rdr pass inet proto tcp from any to any port 80 -> 127.0.0.1 port 8080
-  #rdr pass inet proto tcp from any to any port 443 -> 127.0.0.1 port 8443
+  # rdr pass inet proto tcp from any to any port 80 -> 127.0.0.1 port 8080
+  # rdr pass inet proto tcp from any to any port 443 -> 127.0.0.1 port 8443
 
 
 # Filtering rules go here:

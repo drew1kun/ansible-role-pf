@@ -1,60 +1,39 @@
 ---
 # handlers file for ansible-pf
 
+# For some reason native ansible lauchd module does not load the jobs properly.
 # sshd job
-- name: "Unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
-  command: "launchctl unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
+- name: "Unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.table-expire.plist"
+  command: "launchctl unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.table-expire.plist"
   become: yes
-  listen: Reload /Library/LaunchDaemons/prefix.pf.ssh-bruteforce.expire.plist
-  when:
-    - ansible_os_family == 'Darwin'
-    - pf_ssh_bf_tbl_plist.stat.exists
+  listen: Reload pf.ssh-bruteforce.table-expire plist
+  when: "'Darwin' in ansible_os_family"
 
-- name: "Load /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
-  command: "launchctl load -w /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.expire.plist"
+- name: "Load /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.table-expire.plist"
+  command: "launchctl load -w /Library/LaunchDaemons/{{ pf_prefix }}.pf.ssh-bruteforce.table-expire.plist"
   become: yes
-  listen: Reload /Library/LaunchDaemons/prefix.pf.ssh-bruteforce.expire.plist
-  when: ansible_os_family == 'Darwin'
+  listen: Reload pf.ssh-bruteforce.table-expire plist
+  when: "'Darwin' in ansible_os_family"
 
 
 # emerging-threats job
-- name: "Unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
-  command: "launchctl unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
+- name: "Unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.rules-update.plist"
+  command: "launchctl unload /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.rules-update.plist"
   become: yes
-  listen: Reload /Library/LaunchDaemons/prefix.pf.emerging-threats.update.plist
-  when:
-    - ansible_os_family == 'Darwin'
-    - pf_eto_update_plist.stat.exists
+  listen: Reload pf.emerging-threats.rules-update plist
+  when: "'Darwin' in ansible_os_family"
 
-- name: "Load /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
-  command: "launchctl load -w /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.update.plist"
+- name: "Load /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.rules-update.plist"
+  command: "launchctl load -w /Library/LaunchDaemons/{{ pf_prefix }}.pf.emerging-threats.rules-update.plist"
   become: yes
-  listen: Reload /Library/LaunchDaemons/prefix.pf.emerging-threats.update.plist
-  when: ansible_os_family == 'Darwin'
-
+  listen: Reload pf.emerging-threats.rules-update plist
+  when: "'Darwin' in ansible_os_family"
 
 # pfctl job
-- name: "Unload /System/Library/LaunchDaemons/com.apple.pfctl.plist"
-  command: "launchctl unload /System/Library/LaunchDaemons/com.apple.pfctl.plist"
-  become: yes
+- name: "Restart /System/Library/LaunchDaemons/{{ pf_prefix }}.pf.plist"
+  community.general.launchd:
+    name: "{{ pf_prefix }}.pf"
+    state: restarted
+  become: true
   listen: Reload pfctl
-  when:
-  - ansible_os_family == 'Darwin'
-  - pf_launchd_job.rc == 0
-
-- name: "Load /System/Library/LaunchDaemons/com.apple.pfctl.plist"
-  command: "launchctl load -w /System/Library/LaunchDaemons/com.apple.pfctl.plist"
-  become: yes
-  listen: Reload pfctl
-  async: 1  # prevent pf to block the ansible
-  poll: 0   # established ssh connection
-  when: ansible_os_family == 'Darwin'
-
-- name: "Warning message"
-  debug:
-    msg:
-    - Attention, the MacOS system /etc/pf.conf was modified.
-    - Custom redirect anchor was added.
-    - Please be noted that this file may be overwritten during future system updates.
-    - It seems to be no ways to add custom redirect anchors on MacOS without modifying original /etc/pf.conf
-  when: ansible_os_family == 'Darwin'
+  when: "'Darwin' in ansible_os_family"

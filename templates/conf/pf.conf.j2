@@ -2,11 +2,12 @@
 #===== OPTIONS start =====#
 # Original pf.conf may be overwritten during system updates,
 # this is why it is included here:
-include "/etc/pf.conf"
+#include "/etc/pf.conf"
 #====== OPTIONS end ======#
 
 {% endif %}
-{% if ansible_os_family != 'Darwin' and pf_translation != None %}
+{#{% if ansible_os_family != 'Darwin' and pf_translation != None %}#}
+{% if pf_translation != None %}
 #=== TRANSLATION start ===#
 rdr-anchor "{{ pf_prefix }}.rdr"
 load anchor "{{ pf_prefix }}.rdr" from "/etc/pf.anchors/{{ pf_prefix }}.rdr.rules"
