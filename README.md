@@ -101,43 +101,54 @@ Status: Enabled for 0 days 00:20:41           Debug: Urgent
 sudo pfctl -s all
 ```
 
+### Show the launchd jobs loaded:
+```
+watch -n1 -d 'launchctl list | grep <pf_prefix>'
+```
+
+
 ### SSH Bruteforce Table
 
-Start the ssh bruteforce attack from kali machine (192.168.1.197):
+Start the ssh bruteforce attack from kali machine (192.168.68.113):
 
 **hydra**
 
 ```
-hydra -l root -P /usr/share/wordlists/fasttrack.txt 192.168.1.10 ssh
+hydra -l root -P /usr/share/wordlists/fasttrack.txt 192.168.68.104 ssh
 ```
 
 **medusa**
 
 ```
-medusa -u root -P /usr/share/wordlists/fasttrack.txt -h 192.168.1.10 -M ssh
+medusa -u root -P /usr/share/wordlists/fasttrack.txt -h 192.168.68.104 -M ssh
 ```
 
 **ncrack** (most efficient):
 
 ```
-ncrack -U users.txt -P /usr/share/wordlists/fasttrack.txt 192.168.1.10:22
+ncrack -U users.txt -P /usr/share/wordlists/fasttrack.txt 192.168.68.104:22
 ```
 
 At some point, you may to check to see if you have attackers in your attackers table. To do that, use this command:
 
 ```
-sudo pfctl -a drew.sshd -t ssh_bruteforce -T show
+watch -n1 -d 'sudo pfctl -a drew.sshd -t ssh_bruteforce -T show'
 ```
 
 This command lists the IPs in the attackers table for the sshd anchor.
 
 On MacOS result will look like this:
 
+```
 No ALTQ support in kernel
-
 ALTQ related functions disabled
+   192.168.68.113
+```
 
-   **192.168.1.197**
+See screenshot:
+
+![](./imgs/ssh-bruteforce.jpg)
+
 
 If you accidentally (or during testing) get a legitimate IP in the attackers table, you can remove it with this command (replace a.b.c.d with your IP):
 
