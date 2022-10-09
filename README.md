@@ -3,6 +3,14 @@
 [![MIT licensed][mit-badge]][mit-link]
 [![Galaxy Role][role-badge]][galaxy-link]
 
+DEPRECATION NOTICE
+----
+This role is being deprecated in favor of [ansible-collection-mac][mac-github-link].
+
+Collection on Galaxy: [drew1kun.mac][mac-galaxy-link]
+
+Description
+----
 Description
 ----
 
@@ -183,3 +191,5 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-link]: https://raw.githubusercontent.com/drew1kun/ansible-pf/master/LICENSE
 [sip-link]: https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection
+[mac-github-link]: https://github.com/drew1kun/ansible-collection-mac
+[mac-galaxy-link]: https://galaxy.ansible.com/drew1kun/mac
